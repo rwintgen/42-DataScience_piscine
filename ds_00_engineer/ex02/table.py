@@ -33,11 +33,18 @@ def find_col_type(value):
 		return 'CHAR(1)'
 	return 'TEXT'
 
-def create_table():
-	return
+def create_table(cur, table_name, headers, sample_row):
+	types = [find_col_type(value) for value in sample_row]
+	columns = ', '.join(f'{header} {type}' for header, type in zip(headers, types))
+	query = f'CREATE TABLE IF NOT EXISTS {table_name} ({columns});'
+	cur.execute(query)
 
-def populate_table():
-	return
+def populate_table(cur, table_name, headers, rows):
+	placeholders = ', '.join(['%s'] * len(headers))
+	column_names = ', '.join(headers)
+	query = f'INSERT INTO {table_name} ({column_names}) VALUES ({placeholders})'
+	for row in rows:
+		cur.execute(query, row)
 
 def main():
 	path_to_folder = './customer'
@@ -46,11 +53,20 @@ def main():
 	if not data_files:
 		return
 	
-	with connect_to_db as conn:
-		with conn.cursor as cur:
+	with connect_to_db() as conn:
+		with conn.cursor() as cur:
 			for data_file in data_files:
-				create_table()
-				populate_table()
+				file_path = os.path.join(path_to_folder, data_file)
+				table_name = os.path.splitext(data_file)[0]
+
+				with open(file_path, 'r') as f:
+					lines = [line.strip() for line in f if line.strip()]
+					headers = lines[0].split(',')
+					sample_row = lines[1].split(',')
+					data_rows = [line.split(',') for line in lines[1:]]
+
+				create_table(cur, table_name, headers, sample_row)
+				populate_table(cur, table_name, headers, data_rows)
 				conn.commit()
 
 if __name__ == '__main__':
