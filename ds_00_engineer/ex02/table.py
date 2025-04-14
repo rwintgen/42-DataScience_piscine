@@ -1,3 +1,4 @@
+import os
 import psycopg2
 from datetime import datetime
 
@@ -33,8 +34,24 @@ def find_col_type(value):
 	return 'TEXT'
 
 def create_table():
+	return
+
+def populate_table():
+	return
 
 def main():
+	path_to_folder = './customer'
+	data_files = [file for file in os.listdir(path_to_folder) if file.endswith('.csv')]
+
+	if not data_files:
+		return
+	
+	with connect_to_db as conn:
+		with conn.cursor as cur:
+			for data_file in data_files:
+				create_table()
+				populate_table()
+				conn.commit()
 
 if __name__ == '__main__':
 	main()
