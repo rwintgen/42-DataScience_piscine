@@ -12,8 +12,11 @@ def connect_to_db():
 	)
 
 def find_col_type(value):
+	if value.endswith(' UTC'):
+		value = value[:-4]
+		
 	try:
-		datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
+		datetime.strptime(value, '%Y-%m-%d %H:%M:%S UTC')
 		return 'TIMESTAMP'
 	except ValueError:
 		pass
