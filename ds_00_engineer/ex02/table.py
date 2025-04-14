@@ -1,7 +1,6 @@
 import os
 import psycopg2
 import pandas as pd
-from datetime import datetime
 
 def connect_to_db():
 	return psycopg2.connect(
