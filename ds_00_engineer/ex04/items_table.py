@@ -10,7 +10,7 @@ def connect_to_db():
 	)
 
 def create_table(cur, table_name, headers):
-	column_types = ['TIMESTAMPTZ', 'TEXT', 'INTEGER', 'NUMERIC(10, 2)', 'BIGINT', 'UUID']
+	column_types = ['INTEGER', 'BIGINT', 'TEXT', 'TEXT']
 	columns = ', '.join(f"{header} {column_type}" for header, column_type in zip(headers, column_types))
 	query = f"CREATE TABLE IF NOT EXISTS {table_name} ({columns});"
 	cur.execute(query)
