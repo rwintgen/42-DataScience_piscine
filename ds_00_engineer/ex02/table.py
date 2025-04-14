@@ -16,7 +16,7 @@ def find_col_type(value):
 		value = value[:-4]
 		
 	try:
-		datetime.strptime(value, '%Y-%m-%d %H:%M:%S UTC')
+		datetime.strptime(value, '%Y-%m-%d %H:%M:%S')
 		return 'TIMESTAMP'
 	except ValueError:
 		pass
