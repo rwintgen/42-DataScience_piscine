@@ -1,6 +1,5 @@
 import os
 import psycopg2
-import pandas as pd
 
 def connect_to_db():
 	return psycopg2.connect(
@@ -11,36 +10,13 @@ def connect_to_db():
 		port='5432'
 	)
 
-def find_col_types(df):
-	type_dict = {
-		'int64': 'BIGINT',
-		'float64': 'NUMERIC(10, 2)',
-		'bool': 'BOOLEAN',
-		'datetime64[ns]': 'TIMESTAMPTZ',
-		'object': 'TEXT'
-	}
-
-	column_types = {}
-	for column in df.columns:
-		dtype = str(df[column].dtype)
-		if dtype == 'object' and df[column].str.match(r'^\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2} UTC$').any():
-			column_types[column] = 'TIMESTAMPTZ'
-		elif dtype == 'object' and df[column].str.match(r'^[0-9a-fA-F-]{36}$').any():
-			column_types[column] = 'UUID'
-		elif dtype in type_dict:
-			column_types[column] = type_dict[dtype]
-		else:
-			column_types[column] = 'TEXT'
-	return column_types
-
 def create_table(file_path, table_name, cur):
 	with open(file_path, 'r') as f:
 		headers = f.readline().strip().split(',')
 		first_row = f.readline().strip().split(',')
 
-	df = pd.DataFrame([first_row], columns=headers)
-	column_types = find_col_types(df)
-	columns = ', '.join(f'{col} {col_type}' for col, col_type in column_types.items())
+	column_types = ['TIMESTAMPTZ', 'TEXT', 'INTEGER', 'NUMERIC(10, 2)', 'BIGINT', 'UUID']
+	columns = ', '.join(f"{header} {col_type}" for header, col_type in zip(headers, column_types))
 	query = f'CREATE TABLE IF NOT EXISTS {table_name} ({columns});'
 	cur.execute(query)
 
