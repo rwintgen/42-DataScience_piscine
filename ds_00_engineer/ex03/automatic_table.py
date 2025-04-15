@@ -31,36 +31,28 @@ def find_col_types(df):
 			column_types[column] = 'TEXT'
 	return column_types
 
-def create_table(cur, table_name, column_types):
+def create_table(file_path, table_name, cur):
+	df = pd.read_csv(file_path)
+	column_types = find_col_types(df)
 	columns = ', '.join(f'{col} {col_type}' for col, col_type in column_types.items())
 	query = f'CREATE TABLE IF NOT EXISTS {table_name} ({columns});'
 	cur.execute(query)
-
-def populate_table(cur, table_name, df):
-	placeholders = ', '.join(['%s'] * len(df.columns))
-	column_names = ', '.join(df.columns)
-	query = f'INSERT INTO {table_name} ({column_names}) VALUES ({placeholders})'
-	for row in df.itertuples(index=False, name=None):
-		cur.execute(query, row)
-
-def process_csv(file_path, table_name, cur):
-	df = pd.read_csv(file_path)
-	column_types = find_col_types(df)
-	create_table(cur, table_name, column_types)
-	populate_table(cur, table_name, df)
 
 def main():
 	path_to_folder = './customer'
 	files = [file for file in os.listdir(path_to_folder) if file.endswith('.csv')]
 
-	if not files:
-		return
-	with connect_to_db() as conn:
-		with conn.cursor() as cur:
-			for file in files:
-				file_path = os.path.join(path_to_folder, file)
-				process_csv(file_path, file.split('.')[0], cur)
-				conn.commit()
+	try:
+		with connect_to_db() as conn:
+			with conn.cursor() as cur:
+				for file in files:
+					file_path = os.path.join(path_to_folder, file)
+					table_name = file.split('.')[0]
+					create_table(file_path, table_name, cur)
+					conn.commit()
+					print(f"Table successfully created: {table_name}")
+	except Exception as e:
+		print(f"Error: {e}")
 
 if __name__ == '__main__':
 	main()

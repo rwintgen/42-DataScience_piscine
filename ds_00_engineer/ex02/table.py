@@ -19,15 +19,17 @@ def main():
 	file_path = './customer/data_2023_jan.csv'
 	table_name = 'data_2023_jan'
 
-	with open(file_path, 'r') as f:
-		lines = [line.strip() for line in f if line.strip()]
-		headers = lines[0].split(',')
-		data_rows = [line.split(',') for line in lines[1:]]
+	try:
+		with open(file_path, 'r') as f:
+			headers = f.readline().strip().split(',')
 
-	with connect_to_db() as conn:
-		with conn.cursor() as cur:
-			create_table(cur, table_name, headers)
-			conn.commit()
+		with connect_to_db() as conn:
+			with conn.cursor() as cur:
+				create_table(cur, table_name, headers)
+				conn.commit()
+				print(f"Table successfully created: {table_name}")
+	except Exception as e:
+		print(f"Error: {e}")
 
 if __name__ == '__main__':
 	main()
