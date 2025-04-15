@@ -6,7 +6,7 @@ def connect_to_db():
 	return psycopg2.connect(
 		dbname='piscineds',
 		user='rwintgen',
-		password='password',
+		password='mysecretpassword',
 		host='localhost',
 		port='5432'
 	)
