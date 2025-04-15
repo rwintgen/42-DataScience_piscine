@@ -15,13 +15,6 @@ def create_table(cur, table_name, headers):
 	query = f"CREATE TABLE IF NOT EXISTS {table_name} ({columns});"
 	cur.execute(query)
 
-def populate_table(cur, table_name, headers, rows):
-	cols = ', '.join(headers)
-	placeholders = ', '.join(['%s'] * len(headers))
-	query = f"INSERT INTO {table_name} ({cols}) VALUES ({placeholders})"
-	for row in rows:
-		cur.execute(query, row)
-
 def main():
 	file_path = './customer/data_2023_jan.csv'
 	table_name = 'data_2023_jan'
@@ -34,7 +27,6 @@ def main():
 	with connect_to_db() as conn:
 		with conn.cursor() as cur:
 			create_table(cur, table_name, headers)
-			populate_table(cur, table_name, headers, data_rows)
 			conn.commit()
 
 if __name__ == '__main__':
