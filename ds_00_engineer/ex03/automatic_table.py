@@ -13,7 +13,6 @@ def connect_to_db():
 def create_table(file_path, table_name, cur):
 	with open(file_path, 'r') as f:
 		headers = f.readline().strip().split(',')
-		first_row = f.readline().strip().split(',')
 
 	column_types = ['TIMESTAMPTZ', 'TEXT', 'INTEGER', 'NUMERIC(10, 2)', 'BIGINT', 'UUID']
 	columns = ', '.join(f"{header} {col_type}" for header, col_type in zip(headers, column_types))
