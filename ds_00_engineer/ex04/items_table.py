@@ -15,28 +15,21 @@ def create_table(cur, table_name, headers):
 	query = f"CREATE TABLE IF NOT EXISTS {table_name} ({columns});"
 	cur.execute(query)
 
-def populate_table(cur, table_name, headers, rows):
-	cols = ', '.join(headers)
-	placeholders = ', '.join(['%s'] * len(headers))
-	query = f"INSERT INTO {table_name} ({cols}) VALUES ({placeholders})"
-	for row in rows:
-		row = [value if value != '' else None for value in row]
-		cur.execute(query, row)
-
 def main():
-	file_path = './items/items.csv'
+	file_path = './item/item.csv'
 	table_name = 'items'
 
-	with open(file_path, 'r') as f:
-		lines = [line.strip() for line in f if line.strip()]
-		headers = lines[0].split(',')
-		data_rows = [line.split(',') for line in lines[1:]]
+	try:
+		with open(file_path, 'r') as f:
+			headers = f.readline().strip().split(',')
 
-	with connect_to_db() as conn:
-		with conn.cursor() as cur:
-			create_table(cur, table_name, headers)
-			populate_table(cur, table_name, headers, data_rows)
-			conn.commit()
+		with connect_to_db() as conn:
+			with conn.cursor() as cur:
+				create_table(cur, table_name, headers)
+				conn.commit()
+				print(f"Table successfully created: {table_name}")
+	except Exception as e:
+		print(f"Error: {e}")
 
 if __name__ == '__main__':
 	main()
