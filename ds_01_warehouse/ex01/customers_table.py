@@ -2,7 +2,7 @@ import os
 import psycopg2
 import pandas as pd
 
-# Only process the first MAX_ROWS rows of the csv files for memory protection
+# Only add the first MAX_ROWS rows of the csv files to database
 MAX_ROWS = 10000
 
 def connect_to_db():
