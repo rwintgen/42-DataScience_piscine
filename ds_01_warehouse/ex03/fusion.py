@@ -32,7 +32,34 @@ def create_and_populate_table(path_to_file, cur):
 		insert_query = f"INSERT INTO {table_name} VALUES ({placeholders});"
 		cur.execute(insert_query, tuple(row))
 
-# def combine_tables(cur):
+def combine_tables(cur):
+	alter_query = """
+		ALTER TABLE customers
+		ADD COLUMN IF NOT EXISTS category_id NUMERIC,
+		ADD COLUMN IF NOT EXISTS category_code TEXT,
+		ADD COLUMN IF NOT EXISTS brand TEXT;
+	"""
+	cur.execute(alter_query)
+
+	insert_query = """
+		INSERT INTO customers (event_time, event_type, product_id, price, user_id, user_session, category_id, category_code, brand)
+		SELECT 
+			NULL AS event_time,
+			NULL AS event_type,
+			product_id,
+			NULL AS price,
+			NULL AS user_id,
+			NULL AS user_session,
+			category_id,
+			category_code,
+			brand
+		FROM tmp
+		ON CONFLICT DO NOTHING;
+		-- DROP TABLE IF EXISTS tmp;
+	"""
+
+	print("Combining tables...")
+	cur.execute(insert_query)
 
 
 def main():
@@ -42,9 +69,9 @@ def main():
 		with connect_to_db() as conn:
 			with conn.cursor() as cur:
 				create_and_populate_table(path_to_file, cur)
-				# combine_tables(cur)
+				combine_tables(cur)
 				conn.commit()
-				print(f"Combined tables: ")
+				print("Successfully combined tables")
 	except Exception as e:
 		print(f"Error: {e}")
 
