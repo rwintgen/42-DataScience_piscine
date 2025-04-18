@@ -112,7 +112,7 @@ def main():
 
 		avg_spend_df = fetch_avg_spend_per_customer()
 		draw_avg_spend_chart(avg_spend_df)
-		print("Charts generated")
+		print("Generated charts")
 	except Exception as e:
 		print(f"Error: {e}")
 
