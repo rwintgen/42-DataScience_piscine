@@ -22,7 +22,6 @@ def rm_duplicates(table_name, cur):
 	cur.execute(query)
 
 def main():
-	path_to_folder = './customer'
 	table_name = 'customers'
 
 	try:
