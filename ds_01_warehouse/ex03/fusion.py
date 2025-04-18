@@ -1,4 +1,3 @@
-import os
 import psycopg2
 import pandas as pd
 
@@ -15,7 +14,6 @@ def connect_to_db():
 	)
 
 def create_and_populate_table(path_to_file, cur):
-	dataframes = []
 	table_name = 'tmp'
 
 	print("Creating temporary item table...")

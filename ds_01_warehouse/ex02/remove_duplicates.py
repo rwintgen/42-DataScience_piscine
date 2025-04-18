@@ -1,6 +1,4 @@
-import os
 import psycopg2
-import pandas as pd
 
 def connect_to_db():
 	return psycopg2.connect(
