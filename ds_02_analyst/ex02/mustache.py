@@ -65,18 +65,18 @@ def draw_price_box_plot(df):
 	plt.show()
 
 def draw_price_quantiles_box_plot(stats):
-    sns.boxplot(data=[[stats['min'], stats['qtl25'], stats['qtl50'], stats['qtl75']]], color='#78B075', orient='h')
-    plt.xlabel('Price')
+	sns.boxplot(data=[[stats['min'], stats['qtl25'], stats['qtl50'], stats['qtl75']]], color='#78B075', orient='h')
+	plt.xlabel('Price')
 
-    plt.gca().set_facecolor('#ECECEC')
-    plt.grid(color='white', axis='x')
+	plt.gca().set_facecolor('#ECECEC')
+	plt.grid(color='white', axis='x')
 
-    for spine in plt.gca().spines.values():
-        spine.set_visible(False)
-    plt.tick_params(axis='both', which='both', length=0)
+	for spine in plt.gca().spines.values():
+		spine.set_visible(False)
+	plt.tick_params(axis='both', which='both', length=0)
 
-    plt.tight_layout()
-    plt.show()
+	plt.tight_layout()
+	plt.show()
 
 def draw_avg_baset_price_box_plot(df):
 	sns.boxplot(x=df['avg_basket_price'], color='#73A5C6')
