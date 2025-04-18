@@ -53,7 +53,7 @@ def combine_tables(cur):
 			brand
 		FROM tmp
 		ON CONFLICT DO NOTHING;
-		-- DROP TABLE IF EXISTS tmp;
+		DROP TABLE IF EXISTS tmp;
 	"""
 
 	print("Combining tables...")
