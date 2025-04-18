@@ -25,7 +25,7 @@ def draw_chart(df):
 	event_types = df['event_type']
 	count = df['count']
 
-x	plt.pie(count, labels=event_types, autopct='%1.1f%%')
+	plt.pie(count, labels=event_types, autopct='%1.1f%%')
 	plt.show()
 
 def main():
