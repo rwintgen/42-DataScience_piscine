@@ -40,7 +40,7 @@ def draw_frequency_bar_chart(df):
 	plt.ylabel('Customers')
 	plt.xlim(0, 40)
 
-	plt.xticks(range(0, 41, 10))
+	plt.xticks(range(0, 40, 10))
 
 	plt.gca().set_facecolor('#ECECEC')
 	plt.grid(color='white')
@@ -53,7 +53,22 @@ def draw_frequency_bar_chart(df):
 	plt.show()
 
 def draw_monetary_bar_chart(df):
-	return
+	sns.histplot(df['monetary_value'], bins=range(0, 250, 50), color='#A5C8E1', alpha=1.0, edgecolor='white', zorder=1000)
+	plt.xlabel('Monetary value in A$')
+	plt.ylabel('Customers')
+	plt.xlim(0, 250)
+
+	plt.xticks(range(0, 250, 50))
+
+	plt.gca().set_facecolor('#ECECEC')
+	plt.grid(color='white')
+
+	for spine in plt.gca().spines.values():
+		spine.set_visible(False)
+	plt.tick_params(axis='both', which='both', length=0)
+
+	plt.tight_layout()
+	plt.show()
 
 def main():
 	try:
